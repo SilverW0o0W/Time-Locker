@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Threading;
+using LoggerManager;
 
 namespace TimerManager
 {
     public class TimerController
     {
         public TimeSpan SleepTime { get; private set; }
+        private static Logger log = new Logger();
         private Dictionary<string, DispatcherTimer> timers = new Dictionary<string, DispatcherTimer>();
 
         public Guid Start()
@@ -29,6 +31,7 @@ namespace TimerManager
             timers.Add(guid.ToString(), timer);
             timer.Interval = timeSpan;
             timer.Start();
+            log.Info("Start a new timer. GUID: {0}.TimeSpan: {1}", guid, timeSpan.ToString());
             return guid;
         }
 
@@ -51,6 +54,7 @@ namespace TimerManager
             }
             catch (Exception ex)
             {
+                log.Error("A exception has occured when timer stop. GUID :{0}. Reason: {1}.", guid, ex.ToString());
             }
         }
 
